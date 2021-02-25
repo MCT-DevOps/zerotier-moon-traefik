@@ -1,0 +1,20 @@
+version: "3"
+services:
+  moon:
+    image: seedgou/zerotier-moon
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./conf:/var/lib/zerotier-one
+    # ports:
+    #   - 9993:9993/udp
+    command: "-4 ${IP_ADDR}"
+    labels:
+      - "traefik.enable=true"
+      # service
+      - "traefik.docker.network=frontend"
+      - "traefik.udp.services.zerotiermoon.loadbalancer.server.port=9993"
+      # udp
+      - "traefik.udp.routers.zerotier_moon_udp.entrypoints=zerotier"
+      - "traefik.udp.routers.zerotier_moon_udp.service=zerotiermoon"
