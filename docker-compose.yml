@@ -1,5 +1,6 @@
-version: "3"
+version: "3.7"
 services:
+  # 已弃用这种方式部署
   moon:
     image: seedgou/zerotier-moon
     restart: always
@@ -16,5 +17,13 @@ services:
       - "traefik.docker.network=frontend"
       - "traefik.udp.services.zerotiermoon.loadbalancer.server.port=9993"
       # udp
-      - "traefik.udp.routers.zerotier_moon_udp.entrypoints=zerotier"
+      - "traefik.udp.routers.zerotier_moon_udp.entrypoints=zerotierudp"
       - "traefik.udp.routers.zerotier_moon_udp.service=zerotiermoon"
+      # tcp
+      - "traefik.udp.routers.zerotier_moon_tcp.entrypoints=zerotiertcp"
+      - "traefik.udp.routers.zerotier_moon_tcp.service=zerotiermoon"
+
+networks:
+  default:
+    external: true
+    name: frontend
